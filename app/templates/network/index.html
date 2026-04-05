@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Network Planner | OptiFleet{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <div>
+        <h1 class="h2 fw-bold mb-1">Smart Network Planner</h1>
+        <p class="text-secondary mb-0">Compute the minimum-cost warehouse connection plan with Kruskal's minimum spanning tree algorithm.</p>
+    </div>
+    <button class="btn btn-primary" id="runMST">Optimize Network</button>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-md-4">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Warehouses</div>
+                <div class="kpi-value" id="networkWarehouseCount">{{ warehouses|length }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">MST Links</div>
+                <div class="kpi-value" id="networkEdgeCount">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Total Network Cost</div>
+                <div class="kpi-value" id="networkTotalCost">0.00</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-xl-5">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h4 mb-0">Warehouses</h2>
+                    <span class="text-secondary small">Live DB records</span>
+                </div>
+                <div class="list-group list-group-flush" id="warehouseList">
+                    {% if warehouses %}
+                        {% for warehouse in warehouses %}
+                        <div class="list-group-item px-0">
+                            <div class="fw-semibold">{{ warehouse.name }}</div>
+                            <div class="small text-secondary">{{ warehouse.city }} | Lat {{ warehouse.latitude }}, Lng {{ warehouse.longitude }}</div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-secondary small">No warehouses available yet.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-7">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4 mb-2">Optimization Summary</h2>
+                <div class="dispatch-route-output" id="networkSummary">Run the optimizer to generate the minimum spanning tree.</div>
+            </div>
+        </div>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h4 mb-0">Optimized Network Links</h2>
+                    <span class="text-secondary small">Cycle-free minimum-cost backbone</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle" id="networkTable">
+                        <thead>
+                            <tr>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Cost (km)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="3" class="text-center text-secondary">No optimized links yet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.OptiFleetNetwork = { runUrl: "{{ url_for('network.run_network') }}" };
+</script>
+<script src="{{ url_for('static', filename='js/network.js') }}"></script>
+{% endblock %}

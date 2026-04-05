@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch Engine | OptiFleet{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <div>
+        <h1 class="h2 fw-bold mb-1">Smart Dispatch Engine</h1>
+        <p class="text-secondary mb-0">Generate a dynamic dispatch plan from pending orders using activity selection, Hamiltonian routing, and max subarray profit analysis.</p>
+    </div>
+    <button class="btn btn-primary" id="runDispatch">Generate Dispatch Plan</button>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Pending Orders</div>
+                <div class="kpi-value" id="dispatchPendingCount">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Selected Deliveries</div>
+                <div class="kpi-value" id="dispatchSelectedCount">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Route Stops</div>
+                <div class="kpi-value" id="dispatchRouteStops">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Best Profit Streak</div>
+                <div class="kpi-value" id="dispatchProfitMax">0</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-xl-7">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h4 mb-0">Selected Deliveries</h2>
+                    <span class="text-secondary small">Compatible pending orders only</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle" id="dispatchSelectedTable">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Customer</th>
+                                <th>Package</th>
+                                <th>Destination</th>
+                                <th>Window</th>
+                                <th>Profit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="6" class="text-center text-secondary">Run the dispatch engine to generate a plan.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-5">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Route Output</h2>
+                <div class="dispatch-route-output" id="dispatchRouteText">No route generated yet.</div>
+                <div class="small text-secondary mt-2" id="dispatchRouteMeta">Run the engine to see the recommended delivery sequence.</div>
+                <div class="list-group list-group-flush mt-3" id="dispatchRouteList"></div>
+            </div>
+        </div>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Profit Insights</h2>
+                <div class="small text-secondary mb-2">Highlights the strongest contiguous profit window among selected deliveries.</div>
+                <div id="dispatchProfitText" class="mb-3">No analysis available yet.</div>
+                <div class="list-group list-group-flush" id="dispatchProfitWindow"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.OptiFleetDispatch = { runUrl: "{{ url_for('dispatch.run_dispatch') }}" };
+</script>
+<script src="{{ url_for('static', filename='js/dispatch.js') }}"></script>
+{% endblock %}

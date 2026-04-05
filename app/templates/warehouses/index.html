@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Warehouses | OptiFleet{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <div>
+        <h1 class="h2 fw-bold mb-1">Warehouses</h1>
+        <p class="text-secondary mb-0">Manage warehouse locations used by the network optimization engine.</p>
+    </div>
+    <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#warehouseFormWrap">New Warehouse</button>
+</div>
+
+<div id="warehouseFormWrap" class="collapse show mb-4">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <form id="warehouseForm" class="row g-3">
+                <input type="hidden" name="id" id="warehouseId">
+                <div class="col-md-4">
+                    <label class="form-label">Warehouse Name</label>
+                    <input class="form-control" name="name" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">City</label>
+                    <input class="form-control" name="city" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Latitude</label>
+                    <input class="form-control" name="latitude" type="number" step="0.0001" min="-90" max="90" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Longitude</label>
+                    <input class="form-control" name="longitude" type="number" step="0.0001" min="-180" max="180" required>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">Save Warehouse</button>
+                    <button class="btn btn-outline-secondary" type="button" id="warehouseResetButton">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle" id="warehousesTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.OptiFleetWarehouses = { baseUrl: "/api/warehouses" };
+</script>
+<script src="{{ url_for('static', filename='js/warehouses.js') }}"></script>
+{% endblock %}

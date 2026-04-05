@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | OptiFleet{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <div>
+        <h1 class="h2 fw-bold mb-1">Operations dashboard</h1>
+        <p class="text-secondary mb-0">Live fleet health, delivery volume, and order profit signals.</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Total Orders</div>
+                <div class="kpi-value" id="kpiTotalOrders">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Pending Orders</div>
+                <div class="kpi-value" id="kpiPendingOrders">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Available Vehicles</div>
+                <div class="kpi-value" id="kpiAvailableVehicles">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="kpi-label">Total Profit</div>
+                <div class="kpi-value" id="kpiTotalProfit">0</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0">Order status distribution</h2>
+            <span class="text-secondary small">Powered by Chart.js</span>
+        </div>
+        <canvas id="dashboardChart" height="120"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.OptiFleetDashboard = { summaryUrl: "{{ url_for('dashboard.dashboard_summary') }}" };
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

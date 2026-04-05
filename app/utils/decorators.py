@@ -1,0 +1,14 @@
+from functools import wraps
+
+from flask import jsonify
+from flask_login import current_user
+
+
+def admin_required(view_func):
+    @wraps(view_func)
+    def wrapped(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.role != "admin":
+            return jsonify({"status": "error", "message": "Admin access required."}), 403
+        return view_func(*args, **kwargs)
+
+    return wrapped

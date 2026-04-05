@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Optimizer | OptiFleet{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-12 col-xl-5">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h1 class="h3 fw-bold mb-2">Truck loading optimizer</h1>
+                <p class="text-secondary">Select a truck and pending orders. The service computes the best fractional load mix by value-to-weight ratio.</p>
+                <form id="optimizerForm" class="row g-3 mt-1">
+                    <div class="col-12">
+                        <label class="form-label">Vehicle</label>
+                        <select class="form-select" id="optimizerVehicle" name="vehicle_id" required></select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Eligible Orders</label>
+                        <div class="optimizer-order-list" id="optimizerOrders"></div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary w-100" type="submit">Run Knapsack</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-7">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+                    <div>
+                        <h2 class="h4 mb-1">Optimization result</h2>
+                        <p class="text-secondary mb-0">Database-backed pending orders only. No hardcoded package set.</p>
+                    </div>
+                    <div class="text-end">
+                        <div class="small text-secondary">Remaining capacity</div>
+                        <div class="h4 mb-0" id="remainingCapacity">0</div>
+                    </div>
+                </div>
+                <div class="h2 fw-bold mb-3" id="totalValue">0</div>
+                <div class="table-responsive">
+                    <table class="table align-middle" id="optimizerTable">
+                        <thead>
+                            <tr>
+                                <th>Package</th>
+                                <th>Customer</th>
+                                <th>Destination</th>
+                                <th>Selected Weight</th>
+                                <th>Fraction</th>
+                                <th>Value Gained</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.OptiFleetOptimizer = {
+        contextUrl: "/api/optimizer/context",
+        runUrl: "/api/optimizer/knapsack"
+    };
+</script>
+<script src="{{ url_for('static', filename='js/optimizer.js') }}"></script>
+{% endblock %}
